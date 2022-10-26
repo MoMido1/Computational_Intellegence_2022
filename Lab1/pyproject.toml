@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "lab1"
+version = "0.1.0"
+description = ""
+authors = ["MOHAMED KH <mohammedkhmotrash83@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.16.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
