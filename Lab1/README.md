@@ -12,7 +12,7 @@ for example the node ` [1,2,5,2] ` has a rank of `3` because it covers ` 3 ` ele
 - as a result we visit too many nodes to get our solution
 
 ## Depth first algorithm:
-- we sort the nodes in an ascending order and then start another order such that
+- we sort the nodes in a decending order such that
 example :-
 ```
 [1,2,3,4,5] rank 5
@@ -21,15 +21,9 @@ example :-
 [2,3,1]     rank 3
 [5,2,3]     rank 3
 ```
-the order will be
-```
-[5,2,3]     rank 3
-[0,1,2,4]   rank 4
-[0,5,2,4,6] rank 5
-[2,3,1]     rank 3
-[1,2,3,4,5] rank 5
-```
-starting from the lowest cost and going up each time and then start over
+
+- starting from the highest rank so the deepest point and keep going with the deepest points rank and that will increase our chance to find a solution with a min number of discovered nodes 
+- however we expect to have a large number of weight
 
 ## Gready best-first:
 - here we start our solution with the node which covers most numbers
@@ -37,7 +31,52 @@ starting from the lowest cost and going up each time and then start over
 - then we choose the node that covers the most numbers and rearrange ...
 - and this is the most efficient solution that i use
 
+## A* Algorithm
+- we define the A* algorithm where we will proceed with the selected approach of updating the nodes each time we select a node to discover.
+- but here we will make a new assumption that for 2 equivalent nodes of the number of new numbers, we will make a penalty cost of the number of old numbers that will negatively effect the weight.
+- using this apporach will allow us to calculate the optimal solution with as mininum weight as possible with less number of discovered nodes.
 ## *Final solution is Gready best-first*
 
 
 ## *No external sources were used*
+
+## *Results*
+### Breadth first Algorithm
+```
+For N = 5 => the list has a weight W = 5 and we used 5 nodes to cover it
+For N = 10 => the list has a weight W = 13 and we used 7 nodes to cover it
+For N = 20 => the list has a weight W = 46 and we used 12 nodes to cover it
+For N = 100 => the list has a weight W = 332 and we used 19 nodes to cover it
+For N = 500 => the list has a weight W = 2162 and we used 24 nodes to cover it
+For N = 1000 => the list has a weight W = 4652 and we used 26 nodes to cover it
+```
+### Depth first Algorithm
+```
+For N = 5 => the list has a weight W = 8 and we used 4 nodes to cover it
+For N = 10 => the list has a weight W = 19 and we used 4 nodes to cover it
+For N = 20 => the list has a weight W = 57 and we used 7 nodes to cover it
+For N = 100 => the list has a weight W = 379 and we used 9 nodes to cover it
+For N = 500 => the list has a weight W = 2044 and we used 10 nodes to cover it
+For N = 1000 => the list has a weight W = 5242 and we used 13 nodes to cover it
+
+```
+### Greedy best-first Algorithm
+```
+For N = 5 => the list has a weight W = 6 and we used 3 nodes to cover it
+For N = 10 => the list has a weight W = 13 and we used 3 nodes to cover it
+For N = 20 => the list has a weight W = 32 and we used 4 nodes to cover it
+For N = 100 => the list has a weight W = 191 and we used 5 nodes to cover it
+For N = 500 => the list has a weight W = 1375 and we used 7 nodes to cover it
+For N = 1000 => the list has a weight W = 3087 and we used 8 nodes to cover it
+```
+
+## A* Algorithm
+
+```
+For N = 5 => the list has a weight W = 5 and we used 3 nodes to cover it
+For N = 10 => the list has a weight W = 10 and we used 3 nodes to cover it
+For N = 20 => the list has a weight W = 28 and we used 4 nodes to cover it
+For N = 100 => the list has a weight W = 166 and we used 5 nodes to cover it
+For N = 500 => the list has a weight W = 1297 and we used 8 nodes to cover it
+For N = 1000 => the list has a weight W = 2776 and we used 8 nodes to cover it
+```
