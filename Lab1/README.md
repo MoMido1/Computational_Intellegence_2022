@@ -52,6 +52,36 @@ For N = 1000 => the list has a weight W = 4652 and we used 26 nodes to cover it
 ```
 ### Depth first Algorithm
 ```
+For N = 5 => the list has a weight W = 6 and we used 4 nodes to cover it
+For N = 10 => the list has a weight W = 18 and we used 6 nodes to cover it
+For N = 20 => the list has a weight W = 47 and we used 8 nodes to cover it
+For N = 100 => the list has a weight W = 335 and we used 14 nodes to cover it
+For N = 500 => the list has a weight W = 2392 and we used 24 nodes to cover it
+For N = 1000 => the list has a weight W = 5307 and we used 28 nodes to cover it
+```
+### Greedy best-first Algorithm
+```
+For N = 5 => the list has a weight W = 6 and we used 3 nodes to cover it
+For N = 10 => the list has a weight W = 13 and we used 3 nodes to cover it
+For N = 20 => the list has a weight W = 32 and we used 4 nodes to cover it
+For N = 100 => the list has a weight W = 191 and we used 5 nodes to cover it
+For N = 500 => the list has a weight W = 1375 and we used 7 nodes to cover it
+For N = 1000 => the list has a weight W = 3087 and we used 8 nodes to cover it
+```
+
+
+## *Results*
+### Breadth first Algorithm
+```
+For N = 5 => the list has a weight W = 5 and we used 5 nodes to cover it
+For N = 10 => the list has a weight W = 13 and we used 7 nodes to cover it
+For N = 20 => the list has a weight W = 46 and we used 12 nodes to cover it
+For N = 100 => the list has a weight W = 332 and we used 19 nodes to cover it
+For N = 500 => the list has a weight W = 2162 and we used 24 nodes to cover it
+For N = 1000 => the list has a weight W = 4652 and we used 26 nodes to cover it
+```
+### Depth first Algorithm
+```
 For N = 5 => the list has a weight W = 8 and we used 4 nodes to cover it
 For N = 10 => the list has a weight W = 19 and we used 4 nodes to cover it
 For N = 20 => the list has a weight W = 57 and we used 7 nodes to cover it
