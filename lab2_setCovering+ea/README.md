@@ -99,6 +99,9 @@
 
 ## ( μ + λ) - ES Algorithm
 - we select the best μ offspring out of `μ + λ `individuals
+- using Tournament selection technique to sort first our nodes to select the best μ parents.
+- in our approach we used the maximum selective pressure by doing such thing we can guarantee the best results possible
+- to know the best parents here we use the state with the most new numbers and less old discovered numbers
 - adjusting the values of `μ` and `λ` will guarantee a controll of the parents and the offspring
 - `μ` and `λ` are population dependent so we will use the population as a reference like : `0.2 * N`
 
@@ -108,16 +111,17 @@
 |0.2|0.4 |5| 25 |  25|
 |0.4|0.7 |5| 25 |  25|
 |0.01|0.1|10| 100 |  50|
-|0.2|0.4|10| 111 |  50|
-|0.4|0.7|10| 101 |  50|
+|0.2|0.4|10| 100 |  50|
+|0.4|0.7|10| 100 |  50|
 |0.01|0.1|20| 102 |  34|
-|0.2|0.4|20| 128 |  34|
-|0.4|0.7|20| 51 |  10|
+|0.2|0.4|20| 176 |  34|
+|0.4|0.7|20| 138 |  34|
 |0.01|0.1|100|7686 |  427|
-|0.2|0.4|100|418 |  20|
-|0.4|0.7|100|250 |  10|
+|0.2|0.4|100|266 |  12|
+|0.4|0.7|100|281 |  13|
 
-* as noted this technique will work more effeciently on larger population and by increasing the number of parents and the number of the offsprings will introduce better results
+* as noted this technique will work more effeciently on larger population and by increasing the number of parents and the number of the offsprings will introduce better results.
+
 
 
 
