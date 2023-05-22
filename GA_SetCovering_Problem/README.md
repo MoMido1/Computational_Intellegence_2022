@@ -8,6 +8,12 @@
 
 - The `OFFSPRINGS` number will be a percentage of the `POPULATION_SIZE` and it will be used as a hyper parameter that will help finding the solution with less or more generations.
 
+## Problem Encoding
+- After generating the list of lists each list will be mapped to a tuple object of fixed length representing the number of `PROBLEM_SIZE`.
+
+- Each element will be represented with either 1 or a 0 representing wither this element is covered in this specific list or not.
+
+- The fitness function will represent the sum of the covered numbers over the total number of `PROBLEM_SIZE` and it ranges from `0 -> 1` 
 # *Genetic Operators used*
  ##  1 - Mutation Operator
  - In this operator we mutate the gene by changing a specific loci in it and this is used more often if the population reached saturation with the same individuals.
