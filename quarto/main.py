@@ -23,22 +23,6 @@ class RandomPlayer(quarto.Player):
     def place_piece(self) -> tuple[int, int]:
         return random.randint(0, 3), random.randint(0, 3)
     
-
-
-# # self._Player__quarto.print()
-# self.get_game().select(4)
-# self.get_game().place(1,2)
-# # print(self._Player__quarto.get_board_status())
-# print(self.get_game().get_board_status())
-# o =self.get_game().check_winner()
-# if o:
-#     self.get_game()._board[2,1]= -1
-# # self.get_game().place(1,2)
-# print(self.get_game().get_board_status())
-# # self._Player__quarto.print()
-
-
-
 class ExpertPlayer(quarto.Player):
     # here my algorithm extends the Player class and takes as an input the quarto object of Quarto class
     """Random player"""
