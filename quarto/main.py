@@ -257,16 +257,16 @@ class MinMaxPlayer(quarto.Player):
     def current_game_score(self)->int:
         game = self.get_game()
         s=0
-        for i, row in enumerate(game._board):
+        for row in game._board:
             if -1 not in row :
                 if self.is_a_win(row):
                     return -2
-                s+= self.get_score(row)
+            s += self.get_score(row)
         for i in range(4):
             if -1 not in game._board[:,i] :
                 if self.is_a_win(game._board[:,i]):
                     return -2
-                s+= self.get_score(game._board[:,i])
+            s+= self.get_score(game._board[:,i])
         if self.is_a_win(game._board.diagonal()):
             return -2
         else:
@@ -277,23 +277,18 @@ class MinMaxPlayer(quarto.Player):
             return -2
         else:
             s += self.get_score(reversed_arr.diagonal())
-        return s
-
-                        
-                
+        return s         
 
     def piece_score (self,p) -> int:
         game = self.get_game()
         s =0
         if p in game._board:
-            # this piece is not available
             return -1
         # if the piece will make a win i return -2
         # free_places = np.count_nonzero(game._board == -1)
         for i,row in enumerate(game._board):
             if -1 in row:
                 for j,e in enumerate(row):
-                    # print(game._board[:,j])
                     if e == -1 :
                         game._board[i,j] = p
                         reversed_arr = np.fliplr(game._board)
@@ -301,42 +296,45 @@ class MinMaxPlayer(quarto.Player):
                             game._board[i,j] = -1
                             return -2
                         else:
-                            s += self.get_score(row) +self.get_score(game._board[:,j]) +self.get_score(game._board.diagonal()) + self.get_score(reversed_arr.diagonal())
+                            s += self.get_score(row) + self.get_score(game._board[:,j]) +self.get_score(game._board.diagonal()) + self.get_score(reversed_arr.diagonal())
                         game._board[i,j] = -1
         return s
 
 
     def MinMax_piece(self):
         game = self.get_game()
-        
         available_pieces = list()
         for j in range(16):
             if j not in game._board:
                 available_pieces.append(j)
-                 
         old_piece = game.get_selected_piece()
-        val= self.piece_score(old_piece)
-        if val == -2 or len(available_pieces)== 0:
+        eval= self.current_game_score()
+        if eval == -2 or len(available_pieces)==0:
             game.select(old_piece)
-            return None,val
+            return None,eval
+        
         evaluations = list()
         for piece in available_pieces:
-            
             o_p = game.get_selected_piece()
             game.select(piece)
-            y,x =self.place_extreme_piece()
-            game.place(y,x)
+            x,y =self.place_extreme_piece()
+            game._board[y,x] = piece
             _,val = self.MinMax_piece()
-            evaluations.append((piece,val))
-            game._board[x,y]= -1
+            
+            if np.count_nonzero(game._board == -1) == 1:
+                evaluations.append((piece,-2))
+            else:
+                val= self.current_game_score()
+                evaluations.append((piece,val))
+            game._board[y,x]= -1
             game.select(o_p)
-
         game.select(old_piece)
-        selected_piece = min(evaluations,key= lambda x:x[1]) if min(evaluations,key= lambda x:x[1])[1] ==-2 else max(evaluations,key= lambda x:x[1])
+        selected_piece = sorted(evaluations,key= lambda x:x[1], reverse=True)[0]
         return selected_piece
    
     def choose_extreme_piece(self,t=True)-> int:
         # t=True he will select the piece with highest score 8,7,-1  then 8
+        # here i want to choose a piece that will gaurantee for him the loose
         game = self.get_game()
         available_pieces = list()
         for j in range(16):
@@ -344,23 +342,14 @@ class MinMaxPlayer(quarto.Player):
                 score= self.piece_score(j)
                 available_pieces.append((j,score)) 
         available_pieces =sorted(available_pieces,key= lambda x:x[1],reverse=t)
-        # print(available_pieces)
-        # print(available_pieces[0][0])
-        # game.print()
         return available_pieces[0][0]
 
 
     def choose_piece(self) -> int:
         # my goal here is to choose the piece that gives 
         # the min reward
-        game = self.get_game()
-        old_piece = game.get_selected_piece()
-        # print(old_piece)
-        num = self.MinMax_piece()[0]
-        # print(old_piece)
-        game.__selected_piece_index = old_piece
-        
-        return num
+        num = self.MinMax_piece()
+        return num[0]
     
     def place_score(self,place,piece)-> int:
         i,j = place
@@ -374,12 +363,9 @@ class MinMaxPlayer(quarto.Player):
                 # game.print()
                 return -2
             else:
-                s += self.get_score(row) +self.get_score(game._board.diagonal()) + self.get_score(reversed_arr.diagonal())
-                        
+                s += self.get_score(row) +self.get_score(game._board.diagonal()) + self.get_score(reversed_arr.diagonal())      
         for j in range(4):
             if self.is_a_win(game._board[:,j]):
-                
-                # print('dd')
                 return -2
             else:
                 s+= self.get_score(game._board[:,j])
@@ -388,6 +374,7 @@ class MinMaxPlayer(quarto.Player):
         return s
         
     def place_extreme_piece(self) -> tuple[int, int]:
+        # he will place it in the best place
         game = self.get_game()
         piece = game.get_selected_piece()
         if piece == -1:
@@ -403,8 +390,9 @@ class MinMaxPlayer(quarto.Player):
                         return int(p[1]),int(p[0])
                     if score != -1:
                         available_places.append((p,score)) 
-        place = sorted(available_places,key=lambda x:x[1])[0][0]
-        return int(place[1]) , int(place[0])
+        place = sorted(available_places,key=lambda x:x[1],reverse=False)[0][0]
+        # print(place)
+        return int(place[0]) , int(place[1])
     
     def MinMax_place(self):
         game = self.get_game()
@@ -423,36 +411,28 @@ class MinMaxPlayer(quarto.Player):
             return available_places[0], val
         
         evaluations= list()
-
         for place in available_places:
-            
             game._board[place[0],place[1]] = piece
             o_p = game.get_selected_piece()
-            
             e = self.choose_extreme_piece()
             game.select(e)
             _,val = self.MinMax_place()
-            evaluations.append((place,val))
-            game.select(o_p)
+            if np.count_nonzero(game._board == -1) == 1:
+                evaluations.append((place,-2))
+            else:
+                val= self.current_game_score()
+                evaluations.append((place,val))
             game._board[place[0],place[1]] = -1
+            game.select(o_p)
         game.select(piece)
 
         selected_place=0
         if isinstance(evaluations, list):
-            selected_place = min(evaluations,key= lambda x:x[1]) if min(evaluations,key= lambda x:x[1])[1] ==-2 else max(evaluations,key= lambda x:x[1])
-        
+            selected_place = min(evaluations,key= lambda x:x[1])
         else:
             selected_place = evaluations
         return selected_place
 
-        
-        
-    # score= self.place_score(p,piece)
-    # game._board[i,j] = -1
-    # if(score == -2):
-    #     return int(p[1]),int(p[0])            
-        # place = sorted(available_places,key=lambda x:x[1])[0][0]
-        # return int(place[1]) , int(place[0])
 
     def place_piece(self) -> tuple[int, int]:
         game = self.get_game()
@@ -461,13 +441,14 @@ class MinMaxPlayer(quarto.Player):
                 for j in range(4):
                     if game._board[i,j] ==-1:
                         return j,i
+        
         p = self.MinMax_place()
+        
         r=None
         if isinstance(p, tuple):
             r=p[0]
         else:
             r=p
-        print(p)
         return r[1],r[0]
     
     def get_game(self):
@@ -476,33 +457,32 @@ class MinMaxPlayer(quarto.Player):
  
 def main():
     game = quarto.Quarto()
-    # e = MinMaxPlayer(game)
-    game._board[0,:]= [-1,10,7,-1]
-    game._board[1,:]= [9,3,-1,11]
-    game._board[2,:]= [8,4,-1,6]
-    game._board[3,:]= [-1,12,-1,0]
-    # game._current_player=1
-    # # print(e.is_a_win([5,6,10,8]))
-    # game.select(14)
-    # game.print()
-    # # # x = e.choose_piece()
-    # x,y = e.place_piece()
-    # game.place(x,y)
-    # print(f"{x} and {y}")
-    # game.print()
-    # x,y =e.place_piece()
-    # # print('hhhh')
-    
-    # print(f"{x} and {y}")
-    # game.place(x,y)
-    
+    e= MinMaxPlayer(game)
+    # # Making game easier for MinMax Algorithm to work 
+    # # " Uncomment the next section and comment the ExpertPlayer line to test the MinMax "
+    game.select(10)
+    game.place(1,0)
+    game.select(7)
+    game.place(2,0)
+    game.select(9)
+    game.place(0,1)
+    game.select(3)
+    game.place(1,1)
+    game.select(11)
+    game.place(3,1)
+    game.select(8)
+    game.place(0,2)
+    game.select(4)
+    game.place(1,2)
+    game.select(12)
+    game.place(1,3)
+    game.select(0)
+    game.place(3,3)  
+    game.set_players(( RandomPlayer(game),MinMaxPlayer(game)))
 
     # game.set_players((ExpertPlayer(game), RandomPlayer(game)))
-    
-    game.set_players((MinMaxPlayer(game), RandomPlayer(game)))
     winner = game.run()
     logging.warning(f"main: Winner: player {winner}")
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
