@@ -408,7 +408,7 @@ class MinMaxPlayer(quarto.Player):
  
 def main():
     game = quarto.Quarto()
-    e= MinMaxPlayer(game)
+    
     # # Making game easier for MinMax Algorithm to work 
     # # " Uncomment the next section and comment the ExpertPlayer line to test the MinMax "
     # game.select(10)
