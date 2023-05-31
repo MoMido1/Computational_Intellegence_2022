@@ -93,32 +93,14 @@ class ExpertPlayer(quarto.Player):
     def choose_piece(self) -> int:
         # i will choose the piece that max the reward without making the win
         # loop for all pieces
-        # each piece will have a score that is defined based on the number of 
-        # 3's that this piece could form if it was placed in any place
-        # and i choose the piece with the max 3's
         game = self.get_game()
         available_pieces = list()
-        # print('choosing a piece')
-        # available pieces
         
         for j in range(16):
             if j not in game._board:
                 score= self.piece_score(j)
                 available_pieces.append((j,score)) 
         
-        # game._board[0,:]= [0,2,-1,-1]
-        # game._board[1,:]= [-1,-1,7,8]
-        # game._board[2,:]= [-1,10,-1,12]
-        # game._board[3,:]= [13,-1,-1,15]
-        
-
-        
-        # score =game._board[:,j]
-        # if score == -1:
-        #     #unavailable piece
-        #     return 0
-
-        # print('my selection is '+ str(sorted(available_pieces,key= lambda x:x[1],reverse=True)[0][0]))
         return sorted(available_pieces,key= lambda x:x[1],reverse=True)[0][0]
 
     def place_score(self,place,piece)-> int:
